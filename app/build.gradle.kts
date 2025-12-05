@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "com.rupambose.knowledgeflow"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.rupambose.knowledgeflow"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 

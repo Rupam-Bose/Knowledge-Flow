@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/abeezee</item>
+        <item>@font/agbalumo</item>
+        <item>@font/aladin</item>
+        <item>@font/alex_brush</item>
+        <item>@font/architects_daughter</item>
+        <item>@font/bilbo_swash_caps</item>
+    </array>
+</resources>
