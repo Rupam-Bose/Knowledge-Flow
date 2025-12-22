@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.rupambose.knowledgeflow.MainActivity;
+import com.rupambose.knowledgeflow.MainProfile;
 import com.rupambose.knowledgeflow.Models.UserData;
 import com.rupambose.knowledgeflow.R;
 
@@ -76,8 +76,9 @@ public class loginsignupactivity extends AppCompatActivity {
                         .addOnCompleteListener(task ->{
                             if(task.isSuccessful()){
                                 Toast.makeText(loginsignupactivity.this, "Successfully Login", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(loginsignupactivity.this, MainActivity.class);
+                                Intent intent = new Intent(loginsignupactivity.this, MainProfile.class);
                                 startActivity(intent);
+                                finish();
                             }
                             else{
                                 Toast.makeText(loginsignupactivity.this, "Invalid Email or Password", Toast.LENGTH_SHORT).show();
@@ -113,11 +114,11 @@ public class loginsignupactivity extends AppCompatActivity {
                                 .addOnCompleteListener(task -> {
 
                                     if (task.isSuccessful()) {
-                                        // New user created
+
                                         saveUserToDatabase(register_name, register_email);
 
                                     } else {
-                                        // Email already exists → try login
+
                                         auth.signInWithEmailAndPassword(register_email, register_pass)
                                                 .addOnCompleteListener(loginTask -> {
 
@@ -162,8 +163,7 @@ public class loginsignupactivity extends AppCompatActivity {
         String userId = user.getUid();
         Log.d("DB_TEST", "UID: " + userId);
 
-        DatabaseReference userRef =
-                database.getReference("Users").child(userId);
+        DatabaseReference userRef = database.getReference("Users").child(userId);
 
         UserData userData = new UserData(name, email);
 
@@ -172,6 +172,7 @@ public class loginsignupactivity extends AppCompatActivity {
                     Toast.makeText(this, "Successfully Registered", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(loginsignupactivity.this, welcome.class);
                     startActivity(intent);
+                    finish();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("DB_TEST", "DB ERROR: " + e.getMessage());

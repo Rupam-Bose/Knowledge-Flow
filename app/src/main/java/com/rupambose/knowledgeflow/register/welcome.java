@@ -11,18 +11,24 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.rupambose.knowledgeflow.MainProfile;
 import com.rupambose.knowledgeflow.R;
 
 public class welcome extends AppCompatActivity {
 
-
+    private FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome);
         AppCompatButton login_btn = findViewById(R.id.login_btn);
         AppCompatButton signUp_btn = findViewById(R.id.signup_btn);
+        auth = FirebaseAuth.getInstance();
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,5 +54,16 @@ public class welcome extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if(currentUser != null){
+            Intent intent = new Intent(welcome.this, MainProfile.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
