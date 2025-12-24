@@ -76,7 +76,6 @@ public class MainProfile extends AppCompatActivity {
             if (mail != null) email.setText(mail);
         });
 
-
         fabicon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,17 +124,18 @@ public class MainProfile extends AppCompatActivity {
                     public void onStart(String requestId) {
                         Toast.makeText(MainProfile.this, "Uploading...", Toast.LENGTH_SHORT).show();
                     }
-
                     @Override
                     public void onProgress(String requestId, long bytes, long totalBytes) {
                     }
 
                     @Override
-                    public void onSuccess(String requestId, Map resultData) {    String imageUrl = resultData.get("secure_url").toString();
+                    public void onSuccess(String requestId, Map resultData) {
+
+                          String imageUrl = resultData.get("secure_url").toString();
 
                         String userId = FirebaseAuth.getInstance().getUid();
 
-                        FirebaseDatabase.getInstance("https://knowledge-flow-87853-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                          FirebaseDatabase.getInstance("https://knowledge-flow-87853-default-rtdb.asia-southeast1.firebasedatabase.app/")
                                 .getReference("Users")
                                 .child(userId)
                                 .child("profileImage")

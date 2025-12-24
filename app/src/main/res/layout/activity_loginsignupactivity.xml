@@ -45,38 +45,38 @@
         app:layout_constraintStart_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
-    <EditText
-        android:id="@+id/emailEditText"
-        android:layout_width="270dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="68dp"
-        android:background="@drawable/custom_button"
-        android:gravity="center"
-        android:hint="Enter you Email"
-        android:inputType="textEmailAddress"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/SignUp_Name"
-        app:layout_constraintHorizontal_bias="0.433"
-        app:layout_constraintStart_toStartOf="@+id/SignUp_Name"
-        app:layout_constraintTop_toBottomOf="@+id/SignUp_Name"
-        tools:ignore="MissingConstraints" />
+            <EditText
+                android:id="@+id/emailEditText"
+                android:layout_width="270dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="68dp"
+                android:background="@drawable/custom_button"
+                android:gravity="center"
+                android:hint="Enter you Email"
+                android:inputType="textEmailAddress"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="@+id/SignUp_Name"
+                app:layout_constraintHorizontal_bias="0.433"
+                app:layout_constraintStart_toStartOf="@+id/SignUp_Name"
+                app:layout_constraintTop_toBottomOf="@+id/SignUp_Name"
+                tools:ignore="MissingConstraints" />
 
-    <EditText
-        android:id="@+id/passwardEditText"
-        android:layout_width="270dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/custom_button"
-        android:gravity="center"
-        android:hint="Enter your Password"
-        android:inputType="textPassword"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@+id/emailEditText"
-        app:layout_constraintHorizontal_bias="0.512"
-        app:layout_constraintStart_toStartOf="@+id/emailEditText"
-        app:layout_constraintTop_toBottomOf="@+id/emailEditText"
-        tools:ignore="MissingConstraints"
-        tools:visibility="gone" />
+            <EditText
+                android:id="@+id/passwardEditText"
+                android:layout_width="270dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_button"
+                android:gravity="center"
+                android:hint="Enter your Password"
+                android:inputType="textPassword"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="@+id/emailEditText"
+                app:layout_constraintHorizontal_bias="0.512"
+                app:layout_constraintStart_toStartOf="@+id/emailEditText"
+                app:layout_constraintTop_toBottomOf="@+id/emailEditText"
+                tools:ignore="MissingConstraints"
+                tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login_btn"
@@ -123,53 +123,53 @@
         app:layout_constraintStart_toStartOf="@+id/str"
         app:layout_constraintTop_toBottomOf="@+id/str" />
 
-    <EditText
-        android:id="@+id/SignUp_Name"
-        android:layout_width="270dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/custom_button"
-        android:gravity="center"
-        android:hint="Enter your Name"
-        android:inputType="textPersonName"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@+id/str"
-        app:layout_constraintHorizontal_bias="0.482"
-        app:layout_constraintStart_toStartOf="@+id/str"
-        app:layout_constraintTop_toBottomOf="@+id/str"
-        tools:ignore="MissingConstraints" />
+            <EditText
+                android:id="@+id/SignUp_Name"
+                android:layout_width="270dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/custom_button"
+                android:gravity="center"
+                android:hint="Enter your Name"
+                android:inputType="textPersonName"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/str"
+                app:layout_constraintHorizontal_bias="0.482"
+                app:layout_constraintStart_toStartOf="@+id/str"
+                app:layout_constraintTop_toBottomOf="@+id/str"
+                tools:ignore="MissingConstraints" />
 
-    <EditText
-        android:id="@+id/SignUp_Email"
-        android:layout_width="270dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/custom_button"
-        android:gravity="center"
-        android:hint="Enter your email"
-        android:inputType="textEmailAddress"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@+id/SignUp_Name"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/SignUp_Name"
-        app:layout_constraintTop_toBottomOf="@+id/SignUp_Name"
-        tools:ignore="MissingConstraints" />
+            <EditText
+                android:id="@+id/SignUp_Email"
+                android:layout_width="270dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/custom_button"
+                android:gravity="center"
+                android:hint="Enter your email"
+                android:inputType="textEmailAddress"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/SignUp_Name"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/SignUp_Name"
+                app:layout_constraintTop_toBottomOf="@+id/SignUp_Name"
+                tools:ignore="MissingConstraints" />
 
-    <EditText
-        android:id="@+id/SignUp_Password"
-        android:layout_width="270dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/custom_button"
-        android:gravity="center"
-        android:hint="Enter your password"
-        android:inputType="textPassword"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/SignUp_Email"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/SignUp_Email"
-        app:layout_constraintTop_toBottomOf="@+id/SignUp_Email"
-        tools:visibility="visible" />
+            <EditText
+                android:id="@+id/SignUp_Password"
+                android:layout_width="270dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_button"
+                android:gravity="center"
+                android:hint="Enter your password"
+                android:inputType="textPassword"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/SignUp_Email"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/SignUp_Email"
+                app:layout_constraintTop_toBottomOf="@+id/SignUp_Email"
+                tools:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -134,8 +134,6 @@ public class loginsignupactivity extends AppCompatActivity {
                                                 });
                                     }
                                 });
-
-
                     }
 
                 }
