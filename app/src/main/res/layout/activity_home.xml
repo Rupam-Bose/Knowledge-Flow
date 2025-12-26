@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
+        android:layout_marginStart="0dp"
         android:text="Home"
         android:textColor="@color/black"
         android:textSize="27dp"
@@ -24,9 +25,10 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileicon"
+        android:layout_marginEnd="0dp"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="18dp"
         android:src="@drawable/profileicon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.886"
@@ -49,14 +51,14 @@
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="350dp"
-        android:layout_height="157dp"
-
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="@+id/searchView"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="@+id/searchView"
         app:layout_constraintTop_toBottomOf="@+id/searchView"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:listitem="@layout/blog_item"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
