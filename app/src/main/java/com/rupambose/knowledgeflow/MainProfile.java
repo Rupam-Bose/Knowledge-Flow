@@ -25,6 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.rupambose.knowledgeflow.Home.Home;
 import com.rupambose.knowledgeflow.register.welcome;
 
 import java.util.Map;
@@ -32,8 +33,9 @@ import java.util.Map;
 public class MainProfile extends AppCompatActivity {
 
     ImageView cover;
-    CardView logout;
+    CardView logout,Home,WritingBlog;
     TextView name,email;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,25 @@ public class MainProfile extends AppCompatActivity {
         cover = findViewById(R.id.profile_image);
         name = findViewById(R.id.Username);
         email = findViewById(R.id.Useremail);
+        Home = findViewById(R.id.cardViewHome);
+        WritingBlog = findViewById(R.id.cardViewWritingBlog);
         String userId = FirebaseAuth.getInstance().getUid();
+
+        WritingBlog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainProfile.this,com.rupambose.knowledgeflow.BlogWriting.WriteBlogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainProfile.this,com.rupambose.knowledgeflow.Home.Home.class);
+                startActivity(intent);
+            }
+        });
 
 
         DatabaseReference ref = FirebaseDatabase.getInstance("https://knowledge-flow-87853-default-rtdb.asia-southeast1.firebasedatabase.app/")
