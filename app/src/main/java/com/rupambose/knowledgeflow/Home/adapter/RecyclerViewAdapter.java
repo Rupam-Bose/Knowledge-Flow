@@ -12,6 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.rupambose.knowledgeflow.R;
 
 import java.util.ArrayList;
@@ -21,6 +27,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private final Context context;
     private final List<blogItem> items = new ArrayList<>();
+    private static final String DB_URL = "https://knowledge-flow-87853-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
     public RecyclerViewAdapter(Context context) {
         this.context = context;
@@ -28,9 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void setItems(List<blogItem> data) {
         items.clear();
-        if (data != null) {
-            items.addAll(data);
-        }
+        if (data != null) items.addAll(data);
         notifyDataSetChanged();
     }
 
@@ -43,8 +48,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         blogItem item = items.get(position);
+        String uid = FirebaseAuth.getInstance().getUid();
 
         holder.title.setText(item.getContentTitle());
         holder.profileName.setText(item.getProfileName());
@@ -53,6 +58,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.likesCount.setText(String.valueOf(item.getLikesCount()));
         holder.commentsCount.setText(String.valueOf(item.getCommentsCount()));
 
+        holder.profilePic.setImageResource(R.drawable.profileicon);
         Glide.with(holder.itemView)
                 .load(item.getProfilePic())
                 .placeholder(R.drawable.profileicon)
@@ -61,17 +67,47 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.profilePic);
 
-        // Sync like icon state
-        holder.likes.setSelected(item.isLiked());
-        holder.likes.setImageResource(item.isLiked() ? R.drawable.heart_red : R.drawable.heart_black);
+        // hydrate liked state per user
+        if (uid != null && item.getKey() != null) {
+            FirebaseDatabase.getInstance(DB_URL)
+                    .getReference("posts")
+                    .child(item.getKey())
+                    .child("likes")
+                    .child(uid)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            boolean liked = snapshot.exists();
+                            item.setLiked(liked);
+                            holder.likes.setImageResource(liked ? R.drawable.heart_red : R.drawable.heart_black);
+                        }
+                        @Override public void onCancelled(@NonNull DatabaseError error) { }
+                    });
+        } else {
+            holder.likes.setImageResource(item.isLiked() ? R.drawable.heart_red : R.drawable.heart_black);
+        }
 
         holder.likes.setOnClickListener(v -> {
-            boolean newLiked = !item.isLiked();
-            item.setLiked(newLiked);
-            int newCount = item.getLikesCount() + (newLiked ? 1 : -1);
-            item.setLikesCount(Math.max(newCount, 0));
-            holder.likesCount.setText(String.valueOf(item.getLikesCount()));
-            holder.likes.setImageResource(newLiked ? R.drawable.heart_red : R.drawable.heart_black);
+            if (uid == null || item.getKey() == null) return;
+
+            boolean currentlyLiked = item.isLiked();
+            int newCount = Math.max(item.getLikesCount() + (currentlyLiked ? -1 : 1), 0);
+
+            DatabaseReference postRef = FirebaseDatabase.getInstance(DB_URL)
+                    .getReference("posts")
+                    .child(item.getKey());
+
+            if (currentlyLiked) {
+                postRef.child("likes").child(uid).removeValue();
+            } else {
+                postRef.child("likes").child(uid).setValue(true);
+            }
+            postRef.child("likesCount").setValue(newCount);
+
+            item.setLiked(!currentlyLiked);
+            item.setLikesCount(newCount);
+            holder.likesCount.setText(String.valueOf(newCount));
+            holder.likes.setImageResource(item.isLiked() ? R.drawable.heart_red : R.drawable.heart_black);
         });
     }
 

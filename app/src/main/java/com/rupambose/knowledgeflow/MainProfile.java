@@ -89,7 +89,7 @@ public class MainProfile extends AppCompatActivity {
         userRef.get().addOnSuccessListener(snapshot -> {
             if (!snapshot.exists()) return;
 
-            String uname = snapshot.child(" name").getValue(String.class);
+            String uname = snapshot.child("name").getValue(String.class);
             String mail = snapshot.child("email").getValue(String.class);
 
             if (uname != null) name.setText(uname);

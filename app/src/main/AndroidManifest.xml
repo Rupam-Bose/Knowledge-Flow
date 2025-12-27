@@ -16,6 +16,9 @@
         android:theme="@style/Theme.KnowledgeFlow"
         tools:targetApi="31">
         <activity
+            android:name=".BlogWriting.BlogPost"
+            android:exported="false" />
+        <activity
             android:name=".BlogWriting.WriteBlogActivity"
             android:exported="false" />
         <activity

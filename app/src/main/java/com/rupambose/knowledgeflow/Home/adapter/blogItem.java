@@ -1,6 +1,7 @@
 package com.rupambose.knowledgeflow.Home.adapter;
 
 public class blogItem {
+    private String key;
     private String contentTitle;
     private String profilePic;
     private String profileName;
@@ -9,8 +10,9 @@ public class blogItem {
     private int likesCount;
     private int commentsCount;
     private boolean liked;
+    private long timestamp;
+    private String uid;
 
-    // Required empty constructor for Firebase/serialization
     public blogItem() {
         this("", "", "", "", "", 0, 0);
     }
@@ -32,67 +34,36 @@ public class blogItem {
         this.liked = false;
     }
 
-    public String getContentTitle() {
-        return contentTitle;
-    }
+    public String getKey() { return key; }
+    public void setKey(String key) { this.key = key; }
 
-    public void setContentTitle(String contentTitle) {
-        this.contentTitle = contentTitle;
-    }
+    public String getContentTitle() { return contentTitle; }
+    public void setContentTitle(String contentTitle) { this.contentTitle = contentTitle; }
 
-    public String getProfilePic() {
-        return profilePic;
-    }
+    public String getProfilePic() { return profilePic; }
+    public void setProfilePic(String profilePic) { this.profilePic = profilePic; }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
-    }
+    public String getProfileName() { return profileName; }
+    public void setProfileName(String profileName) { this.profileName = profileName; }
 
-    public String getProfileName() {
-        return profileName;
-    }
+    public String getDate() { return date; }
+    public void setDate(String date) { this.date = date; }
 
-    public void setProfileName(String profileName) {
-        this.profileName = profileName;
-    }
+    public String getPost() { return post; }
+    public void setPost(String post) { this.post = post; }
 
-    public String getDate() {
-        return date;
-    }
+    public int getLikesCount() { return likesCount; }
+    public void setLikesCount(int likesCount) { this.likesCount = likesCount; }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+    public int getCommentsCount() { return commentsCount; }
+    public void setCommentsCount(int commentsCount) { this.commentsCount = commentsCount; }
 
-    public String getPost() {
-        return post;
-    }
+    public boolean isLiked() { return liked; }
+    public void setLiked(boolean liked) { this.liked = liked; }
 
-    public void setPost(String post) {
-        this.post = post;
-    }
+    public long getTimestamp() { return timestamp; }
+    public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
 
-    public int getLikesCount() {
-        return likesCount;
-    }
-
-    public void setLikesCount(int likesCount) {
-        this.likesCount = likesCount;
-    }
-
-    public int getCommentsCount() {
-        return commentsCount;
-    }
-
-    public void setCommentsCount(int commentsCount) {
-        this.commentsCount = commentsCount;
-    }
-
-    public boolean isLiked() {
-        return liked;
-    }
-
-    public void setLiked(boolean liked) {
-        this.liked = liked;
-    }
+    public String getUid() { return uid; }
+    public void setUid(String uid) { this.uid = uid; }
 }
