@@ -16,6 +16,9 @@
         android:theme="@style/Theme.KnowledgeFlow"
         tools:targetApi="31">
         <activity
+            android:name=".question_detail"
+            android:exported="false" />
+        <activity
             android:name=".All_questions"
             android:exported="false" />
         <activity

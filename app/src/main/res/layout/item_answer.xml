@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/answerProfilePic"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/profileicon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/answerUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/answerProfilePic"
+            app:layout_constraintTop_toTopOf="@id/answerProfilePic" />
+
+        <TextView
+            android:id="@+id/answerTimeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10 min ago"
+            android:textSize="12sp"
+            android:textColor="#777"
+            app:layout_constraintStart_toStartOf="@id/answerUserName"
+            app:layout_constraintTop_toBottomOf="@id/answerUserName" />
+
+        <TextView
+            android:id="@+id/answerText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Answer text goes here"
+            android:textSize="14sp"
+            android:textColor="#222"
+            app:layout_constraintTop_toBottomOf="@id/answerProfilePic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
+

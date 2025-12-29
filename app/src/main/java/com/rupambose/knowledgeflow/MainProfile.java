@@ -35,7 +35,7 @@ import java.util.Map;
 public class MainProfile extends AppCompatActivity {
 
     ImageView cover;
-    CardView logout,Home,WritingBlog,bookmarks;
+    CardView logout,Home,WritingBlog,bookmarks,notification;
     TextView name,email;
 
 
@@ -53,12 +53,21 @@ public class MainProfile extends AppCompatActivity {
         Home = findViewById(R.id.cardViewHome);
         WritingBlog = findViewById(R.id.cardViewWritingBlog);
         bookmarks = findViewById(R.id.cardViewbookmarks);
+        notification = findViewById(R.id.cardViewNotifications);
         String userId = FirebaseAuth.getInstance().getUid();
 
         WritingBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainProfile.this,com.rupambose.knowledgeflow.BlogWriting.WriteBlogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainProfile.this, question_detail.class);
                 startActivity(intent);
             }
         });

@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.rupambose.knowledgeflow.All_questions;
+import com.rupambose.knowledgeflow.Ask_question;
 import com.rupambose.knowledgeflow.Home.adapter.RecyclerViewAdapter;
 import com.rupambose.knowledgeflow.Home.adapter.blogItem;
 import com.rupambose.knowledgeflow.MainProfile;
@@ -77,20 +79,36 @@ public class Home extends AppCompatActivity {
         animation_from_bottom = AnimationUtils.loadAnimation(this, R.anim.from_bottom);
         animation_to_bottom = AnimationUtils.loadAnimation(this, R.anim.to_bottom);
 
-        // toggle menu
+
         floating_add.setOnClickListener(v -> {
             SetVisibility(clicked);
             SetAnimation(clicked);
             clicked = !clicked;
         });
 
-        // open write blog
+        floating_question.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Home.this, Ask_question.class);
+                startActivity(intent);
+            }
+        });
+
+        floating_question_answer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Home.this, All_questions.class);
+                startActivity(intent);
+            }
+        });
+
+
         floating_writing.setOnClickListener(view -> {
             Intent intent = new Intent(Home.this, com.rupambose.knowledgeflow.BlogWriting.WriteBlogActivity.class);
             startActivity(intent);
         });
 
-        // open bookmarks page
+
         floating_bookmarks.setOnClickListener(v -> {
             Intent intent = new Intent(Home.this, BookmarksActivity.class);
             startActivity(intent);
