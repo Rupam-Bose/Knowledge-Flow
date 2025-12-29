@@ -13,7 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:layout_marginStart="0dp"
         android:text="Home"
         android:textColor="@color/black"
         android:textSize="27dp"
@@ -25,7 +24,6 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileicon"
-        android:layout_marginEnd="0dp"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="18dp"
@@ -42,15 +40,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="@+id/profileicon"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/homeText"
         app:layout_constraintTop_toBottomOf="@+id/homeText"
         android:queryHint="Search"
         android:iconifiedByDefault="false"
-        android:background="@drawable/search_bar"
-        />
+        android:background="@drawable/search_bar" />
 
-    <!-- xml -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/blogRecyclerView"
         android:layout_width="0dp"
@@ -61,7 +56,6 @@
         app:layout_constraintTop_toBottomOf="@+id/searchView"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/blog_item" />
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_add"
@@ -79,7 +73,6 @@
         app:tint="@color/white"
         tools:ignore="MissingConstraints" />
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_writing"
         android:layout_width="wrap_content"
@@ -94,8 +87,7 @@
         android:visibility="invisible"
         app:tint="@color/white"
         android:clickable="true"
-        android:focusable="true"
-        />
+        android:focusable="true" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_question"

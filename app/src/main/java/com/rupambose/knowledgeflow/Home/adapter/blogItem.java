@@ -12,6 +12,7 @@ public class blogItem {
     private boolean liked;
     private long timestamp;
     private String uid;
+    private boolean bookmarked;
 
     public blogItem() {
         this("", "", "", "", "", 0, 0);
@@ -32,6 +33,7 @@ public class blogItem {
         this.likesCount = likesCount;
         this.commentsCount = commentsCount;
         this.liked = false;
+        this.bookmarked = false;
     }
 
     public String getKey() { return key; }
@@ -66,4 +68,7 @@ public class blogItem {
 
     public String getUid() { return uid; }
     public void setUid(String uid) { this.uid = uid; }
+
+    public boolean isBookmarked() { return bookmarked; }
+    public void setBookmarked(boolean bookmarked) { this.bookmarked = bookmarked; }
 }

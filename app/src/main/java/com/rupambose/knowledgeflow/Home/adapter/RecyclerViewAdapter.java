@@ -1,6 +1,7 @@
 package com.rupambose.knowledgeflow.Home.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.rupambose.knowledgeflow.BlogWriting.BlogPost;
+import com.rupambose.knowledgeflow.MainProfile;
 import com.rupambose.knowledgeflow.R;
+import com.rupambose.knowledgeflow.UserProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,25 +71,60 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.profilePic);
 
-        // hydrate liked state per user
         if (uid != null && item.getKey() != null) {
-            FirebaseDatabase.getInstance(DB_URL)
+            DatabaseReference postRef = FirebaseDatabase.getInstance(DB_URL)
                     .getReference("posts")
-                    .child(item.getKey())
-                    .child("likes")
-                    .child(uid)
+                    .child(item.getKey());
+
+            postRef.child("likes").child(uid)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
                             boolean liked = snapshot.exists();
                             item.setLiked(liked);
                             holder.likes.setImageResource(liked ? R.drawable.heart_red : R.drawable.heart_black);
                         }
                         @Override public void onCancelled(@NonNull DatabaseError error) { }
                     });
+
+            postRef.child("bookmarks").child(uid)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            boolean bookmarked = snapshot.exists();
+                            item.setBookmarked(bookmarked);
+                            holder.bookmark.setImageResource(bookmarked ? R.drawable.save_filled : R.drawable.save);
+                        }
+                        @Override public void onCancelled(@NonNull DatabaseError error) { }
+                    });
         } else {
             holder.likes.setImageResource(item.isLiked() ? R.drawable.heart_red : R.drawable.heart_black);
+            holder.bookmark.setImageResource(item.isBookmarked() ? R.drawable.save_filled : R.drawable.save);
         }
+
+        View.OnClickListener openDetail = v -> {
+            Intent intent = new Intent(context, BlogPost.class);
+            intent.putExtra("postId", item.getKey());
+            intent.putExtra("title", item.getContentTitle());
+            intent.putExtra("content", item.getPost());
+            intent.putExtra("profileName", item.getProfileName());
+            intent.putExtra("profilePic", item.getProfilePic());
+            intent.putExtra("date", item.getDate());
+            intent.putExtra("likesCount", item.getLikesCount());
+            intent.putExtra("commentsCount", item.getCommentsCount());
+            intent.putExtra("authorUid", item.getUid());
+            context.startActivity(intent);
+        };
+
+        View.OnClickListener openAuthorProfile = v -> {
+            if (item.getUid() == null || item.getUid().isEmpty()) return;
+            Intent intent = new Intent(context, UserProfileActivity.class);
+            intent.putExtra("userId", item.getUid());
+            context.startActivity(intent);
+        };
+
+        holder.readMore.setOnClickListener(openDetail);
+        holder.title.setOnClickListener(openDetail);
+        holder.profilePic.setOnClickListener(openAuthorProfile);
+        holder.profileName.setOnClickListener(openAuthorProfile);
 
         holder.likes.setOnClickListener(v -> {
             if (uid == null || item.getKey() == null) return;
@@ -109,6 +148,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.likesCount.setText(String.valueOf(newCount));
             holder.likes.setImageResource(item.isLiked() ? R.drawable.heart_red : R.drawable.heart_black);
         });
+
+        holder.bookmark.setOnClickListener(v -> {
+            if (uid == null || item.getKey() == null) return;
+            boolean currentlyBookmarked = item.isBookmarked();
+            DatabaseReference postRef = FirebaseDatabase.getInstance(DB_URL)
+                    .getReference("posts")
+                    .child(item.getKey())
+                    .child("bookmarks")
+                    .child(uid);
+            if (currentlyBookmarked) {
+                postRef.removeValue();
+            } else {
+                postRef.setValue(true);
+            }
+            item.setBookmarked(!currentlyBookmarked);
+            holder.bookmark.setImageResource(item.isBookmarked() ? R.drawable.save_filled : R.drawable.save);
+        });
     }
 
     @Override
@@ -125,6 +181,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         final TextView likesCount;
         final TextView commentsCount;
         final ImageView likes;
+        final ImageView bookmark;
+        final View readMore;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -136,6 +194,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             likesCount = itemView.findViewById(R.id.likesCount);
             commentsCount = itemView.findViewById(R.id.CommentsCount);
             likes = itemView.findViewById(R.id.likes);
+            bookmark = itemView.findViewById(R.id.Save);
+            readMore = itemView.findViewById(R.id.ReadMore);
         }
     }
 }

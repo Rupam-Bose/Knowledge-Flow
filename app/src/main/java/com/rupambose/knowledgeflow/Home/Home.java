@@ -65,21 +65,40 @@ public class Home extends AppCompatActivity {
         floating_question_answer = findViewById(R.id.floating_question_answer);
         floating_bookmarks = findViewById(R.id.floating_bookmarks);
 
+        // show FAB menu again
+        floating_add.setVisibility(View.VISIBLE);
+        floating_writing.setVisibility(View.INVISIBLE);
+        floating_question.setVisibility(View.INVISIBLE);
+        floating_question_answer.setVisibility(View.INVISIBLE);
+        floating_bookmarks.setVisibility(View.INVISIBLE);
+
         animation_rotate_open_anim = AnimationUtils.loadAnimation(this, R.anim.rotate_open_anim);
         animation_rotate_close_anim = AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim);
         animation_from_bottom = AnimationUtils.loadAnimation(this, R.anim.from_bottom);
         animation_to_bottom = AnimationUtils.loadAnimation(this, R.anim.to_bottom);
 
-        String userId = FirebaseAuth.getInstance().getUid();
+        // toggle menu
+        floating_add.setOnClickListener(v -> {
+            SetVisibility(clicked);
+            SetAnimation(clicked);
+            clicked = !clicked;
+        });
 
+        // open write blog
         floating_writing.setOnClickListener(view -> {
             Intent intent = new Intent(Home.this, com.rupambose.knowledgeflow.BlogWriting.WriteBlogActivity.class);
             startActivity(intent);
         });
 
+        // open bookmarks page
+        floating_bookmarks.setOnClickListener(v -> {
+            Intent intent = new Intent(Home.this, BookmarksActivity.class);
+            startActivity(intent);
+        });
+
         DatabaseReference ref = FirebaseDatabase.getInstance(DB_URL)
                 .getReference("Users")
-                .child(userId)
+                .child(FirebaseAuth.getInstance().getUid())
                 .child("profileImage");
 
         ref.get().addOnSuccessListener(snapshot -> {
@@ -87,12 +106,6 @@ public class Home extends AppCompatActivity {
             if (url != null && !url.isEmpty()) {
                 Glide.with(this).load(url).into(cover);
             }
-        });
-
-        floating_add.setOnClickListener(v -> {
-            SetVisibility(clicked);
-            SetAnimation(clicked);
-            clicked = !clicked;
         });
 
         cover.setOnClickListener(view -> {

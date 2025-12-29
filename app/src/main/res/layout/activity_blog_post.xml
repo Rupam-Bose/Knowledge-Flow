@@ -1,105 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="#F5F5F5">
 
-    <!-- App Bar -->
-    <com.google.android.material.appbar.MaterialToolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        app:title="Blog"
-        app:navigationIcon="@drawable/ic_back"
-        app:elevation="4dp"
-        app:titleTextColor="#000000"/>
+        android:background="@color/purple"
+        android:minHeight="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Blog Post"
+        app:titleTextColor="@android:color/white" />
 
-    <!-- Content -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="56dp"
-        android:fillViewport="true">
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <!-- Blog Title -->
-            <TextView
-                android:id="@+id/blogTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="The Future of Mobile Technology"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
-
-            <!-- Author Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <!-- Profile Image (REQUIRED) -->
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profileImage"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/profileicon"
-                    android:scaleType="centerCrop"
-                    android:clipToOutline="true"/>
+                    android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="12dp">
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/authorName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rupam Bose"
+                        android:textColor="#000000"
                         android:textStyle="bold"
-                        android:textColor="#000000"/>
+                        android:textSize="16sp"
+                        tools:text="Author" />
 
                     <TextView
                         android:id="@+id/blogMeta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="12 Dec 2025 • 5 min read"
+                        android:textColor="#777777"
                         android:textSize="12sp"
-                        android:textColor="#777777"/>
+                        tools:text="Dec 12, 2025" />
                 </LinearLayout>
-
             </LinearLayout>
 
-            <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginVertical="16dp"
-                android:background="#EEEEEE"/>
+                android:background="?android:attr/listDivider" />
 
-            <!-- Blog Content -->
+            <TextView
+                android:id="@+id/blogTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:lineHeight="30sp"
+                tools:text="Blog title" />
+
             <TextView
                 android:id="@+id/blogContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:layout_marginTop="16dp"
                 android:lineSpacingExtra="8dp"
                 android:textColor="#333333"
-                android:text="Mobile technology is evolving at a rapid pace. In the coming years, we can expect significant advancements that will change how we interact with devices.\n\nInnovation is the key to unlocking the future of technology." />
+                android:textSize="16sp"
+                tools:text="Full blog content goes here and is scrollable." />
 
+            <LinearLayout
+                android:id="@+id/actionsRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/likeButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/heart_black" />
+
+                <TextView
+                    android:id="@+id/likeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    tools:text="0" />
+
+                <ImageView
+                    android:id="@+id/commentButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="32dp"
+                    android:src="@drawable/comments" />
+
+                <TextView
+                    android:id="@+id/commentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    tools:text="0" />
+
+                <ImageView
+                    android:id="@+id/bookmarkButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="32dp"
+                    android:src="@drawable/save" />
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

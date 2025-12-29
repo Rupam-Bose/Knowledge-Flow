@@ -25,6 +25,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.rupambose.knowledgeflow.BlogWriting.BlogPost;
+import com.rupambose.knowledgeflow.Home.BookmarksActivity;
 import com.rupambose.knowledgeflow.Home.Home;
 import com.rupambose.knowledgeflow.register.welcome;
 
@@ -33,7 +35,7 @@ import java.util.Map;
 public class MainProfile extends AppCompatActivity {
 
     ImageView cover;
-    CardView logout,Home,WritingBlog;
+    CardView logout,Home,WritingBlog,bookmarks;
     TextView name,email;
 
 
@@ -50,6 +52,7 @@ public class MainProfile extends AppCompatActivity {
         email = findViewById(R.id.Useremail);
         Home = findViewById(R.id.cardViewHome);
         WritingBlog = findViewById(R.id.cardViewWritingBlog);
+        bookmarks = findViewById(R.id.cardViewbookmarks);
         String userId = FirebaseAuth.getInstance().getUid();
 
         WritingBlog.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +67,14 @@ public class MainProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainProfile.this,com.rupambose.knowledgeflow.Home.Home.class);
+                startActivity(intent);
+            }
+        });
+
+        bookmarks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainProfile.this, BookmarksActivity.class);
                 startActivity(intent);
             }
         });
