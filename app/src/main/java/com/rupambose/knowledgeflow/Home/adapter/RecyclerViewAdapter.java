@@ -26,11 +26,13 @@ import com.rupambose.knowledgeflow.UserProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private final Context context;
     private final List<blogItem> items = new ArrayList<>();
+    private final List<blogItem> allItems = new ArrayList<>();
     private static final String DB_URL = "https://knowledge-flow-87853-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
     public RecyclerViewAdapter(Context context) {
@@ -38,8 +40,40 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void setItems(List<blogItem> data) {
+        allItems.clear();
         items.clear();
-        if (data != null) items.addAll(data);
+        if (data != null) {
+            allItems.addAll(data);
+            items.addAll(data);
+        }
+        notifyDataSetChanged();
+    }
+
+    public List<blogItem> getAllItems() {
+        return new ArrayList<>(allItems);
+    }
+
+    public blogItem getItemByKey(String key) {
+        if (key == null) return null;
+        for (blogItem item : allItems) {
+            if (key.equals(item.getKey())) return item;
+        }
+        return null;
+    }
+
+    public void filterByTitle(String query) {
+        items.clear();
+        if (query == null || query.trim().isEmpty()) {
+            items.addAll(allItems);
+        } else {
+            String q = query.toLowerCase(Locale.ROOT);
+            for (blogItem item : allItems) {
+                String title = item.getContentTitle() == null ? "" : item.getContentTitle();
+                if (title.toLowerCase(Locale.ROOT).contains(q)) {
+                    items.add(item);
+                }
+            }
+        }
         notifyDataSetChanged();
     }
 
@@ -114,6 +148,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             context.startActivity(intent);
         };
 
+
         View.OnClickListener openAuthorProfile = v -> {
             if (item.getUid() == null || item.getUid().isEmpty()) return;
             Intent intent = new Intent(context, UserProfileActivity.class);
@@ -125,7 +160,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.title.setOnClickListener(openDetail);
         holder.profilePic.setOnClickListener(openAuthorProfile);
         holder.profileName.setOnClickListener(openAuthorProfile);
-
         holder.likes.setOnClickListener(v -> {
             if (uid == null || item.getKey() == null) return;
 
@@ -165,6 +199,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             item.setBookmarked(!currentlyBookmarked);
             holder.bookmark.setImageResource(item.isBookmarked() ? R.drawable.save_filled : R.drawable.save);
         });
+
+        holder.comments.setOnClickListener(v -> openDetail.onClick(v));
     }
 
     @Override
@@ -183,6 +219,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         final ImageView likes;
         final ImageView bookmark;
         final View readMore;
+        final ImageView comments;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -196,6 +233,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             likes = itemView.findViewById(R.id.likes);
             bookmark = itemView.findViewById(R.id.Save);
             readMore = itemView.findViewById(R.id.ReadMore);
+            comments = itemView.findViewById(R.id.Comments);
         }
     }
 }

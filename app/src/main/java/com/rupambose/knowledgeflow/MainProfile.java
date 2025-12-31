@@ -23,11 +23,12 @@ import com.cloudinary.android.callback.UploadCallback;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.rupambose.knowledgeflow.BlogWriting.BlogPost;
+import com.google.firebase.database.ValueEventListener;
 import com.rupambose.knowledgeflow.Home.BookmarksActivity;
-import com.rupambose.knowledgeflow.Home.Home;
 import com.rupambose.knowledgeflow.register.welcome;
 
 import java.util.Map;
@@ -35,9 +36,11 @@ import java.util.Map;
 public class MainProfile extends AppCompatActivity {
 
     ImageView cover;
-    CardView logout,Home,WritingBlog,bookmarks,notification;
-    TextView name,email;
+    CardView logout,Home,WritingBlog,bookmarks, all_questions;
+    TextView name,email, followersCountMain;
 
+
+    private static final String DB_URL = "https://knowledge-flow-87853-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +56,8 @@ public class MainProfile extends AppCompatActivity {
         Home = findViewById(R.id.cardViewHome);
         WritingBlog = findViewById(R.id.cardViewWritingBlog);
         bookmarks = findViewById(R.id.cardViewbookmarks);
-        notification = findViewById(R.id.cardViewNotifications);
+        all_questions = findViewById(R.id.cardViewNotifications);
+        followersCountMain = findViewById(R.id.followersCountMain);
         String userId = FirebaseAuth.getInstance().getUid();
 
         WritingBlog.setOnClickListener(new View.OnClickListener() {
@@ -64,10 +68,10 @@ public class MainProfile extends AppCompatActivity {
             }
         });
 
-        notification.setOnClickListener(new View.OnClickListener() {
+        all_questions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainProfile.this, question_detail.class);
+                Intent intent = new Intent(MainProfile.this, All_questions.class);
                 startActivity(intent);
             }
         });
@@ -141,6 +145,28 @@ public class MainProfile extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        watchFollowers();
+    }
+
+    private void watchFollowers() {
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid == null) return;
+        FirebaseDatabase.getInstance(DB_URL)
+                .getReference("followers")
+                .child(uid)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        long count = snapshot.getChildrenCount();
+                        if (followersCountMain != null) {
+                            followersCountMain.setText(count + " followers");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) { }
+                });
     }
 
     @Override

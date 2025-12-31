@@ -33,5 +33,21 @@
         android:layout_marginTop="6dp"
         android:textColor="@color/black"
         tools:text="author@email.com" />
-</LinearLayout>
 
+    <TextView
+        android:id="@+id/followersCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        tools:text="0 followers" />
+
+    <Button
+        android:id="@+id/followButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/purple"
+        android:text="Follow" />
+</LinearLayout>

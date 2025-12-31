@@ -1,6 +1,7 @@
 package com.rupambose.knowledgeflow;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,16 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
                 .circleCrop()
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.profilePic);
+
+        View.OnClickListener openAuthor = v -> {
+            if (a.uid == null || a.uid.isEmpty()) return;
+            Context c = holder.itemView.getContext();
+            Intent intent = new Intent(c, UserProfileActivity.class);
+            intent.putExtra("userId", a.uid);
+            c.startActivity(intent);
+        };
+        holder.profilePic.setOnClickListener(openAuthor);
+        holder.userName.setOnClickListener(openAuthor);
     }
 
     @Override
@@ -68,4 +79,3 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
         }
     }
 }
-

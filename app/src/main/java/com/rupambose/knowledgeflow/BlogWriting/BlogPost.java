@@ -2,7 +2,9 @@ package com.rupambose.knowledgeflow.BlogWriting;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,8 +24,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.rupambose.knowledgeflow.Models.Comment;
 import com.rupambose.knowledgeflow.R;
 import com.rupambose.knowledgeflow.UserProfileActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class BlogPost extends AppCompatActivity {
 
@@ -36,12 +47,17 @@ public class BlogPost extends AppCompatActivity {
     private TextView likeCount;
     private TextView commentCount;
     private ImageView bookmarkButton;
+    private RecyclerView commentsRecyclerView;
+    private EditText commentInput;
+    private ImageView commentSend;
 
     private String postId;
     private String authorUid;
     private boolean liked;
     private int likesValue;
     private boolean bookmarked;
+    private final List<Comment> comments = new ArrayList<>();
+    private CommentAdapter commentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +67,13 @@ public class BlogPost extends AppCompatActivity {
 
         bindViews();
         applyInsets();
+        setupCommentsList();
         readIntent();
         prefillFromIntent();
         fetchLatestPost();
         wireLikeToggle();
         wireBookmarkToggle();
+        wireSendComment();
     }
 
     private void bindViews() {
@@ -68,6 +86,9 @@ public class BlogPost extends AppCompatActivity {
         likeCount = findViewById(R.id.likeCount);
         commentCount = findViewById(R.id.commentCount);
         bookmarkButton = findViewById(R.id.bookmarkButton);
+        commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
+        commentInput = findViewById(R.id.commentInput);
+        commentSend = findViewById(R.id.commentSend);
 
         View.OnClickListener openAuthor = v -> {
             if (authorUid == null || authorUid.isEmpty()) return;
@@ -120,7 +141,7 @@ public class BlogPost extends AppCompatActivity {
                 .getReference("posts")
                 .child(postId);
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (!snapshot.exists()) return;
@@ -152,6 +173,7 @@ public class BlogPost extends AppCompatActivity {
 
                 fetchLikeState();
                 fetchBookmarkState();
+                listenForComments();
             }
 
             @Override
@@ -241,5 +263,115 @@ public class BlogPost extends AppCompatActivity {
             bookmarked = !current;
             bookmarkButton.setImageResource(bookmarked ? R.drawable.save_filled : R.drawable.save);
         });
+    }
+
+    private void setupCommentsList() {
+        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        commentAdapter = new CommentAdapter(this, comments);
+        commentsRecyclerView.setAdapter(commentAdapter);
+        commentAdapter.setListener(this::toggleCommentLike);
+    }
+
+    private void wireSendComment() {
+        commentSend.setOnClickListener(v -> {
+            String text = commentInput.getText().toString().trim();
+            if (TextUtils.isEmpty(text)) {
+                commentInput.setError("Enter comment");
+                return;
+            }
+            String uid = FirebaseAuth.getInstance().getUid();
+            if (uid == null || postId == null) {
+                Toast.makeText(this, "Sign in first", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            DatabaseReference userRef = FirebaseDatabase.getInstance(DB_URL)
+                    .getReference("Users").child(uid);
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    String name = snapshot.child("name").getValue(String.class);
+                    String pic = snapshot.child("profileImage").getValue(String.class);
+                    name = name != null ? name : "User";
+                    pic = pic != null ? pic : "";
+
+                    long ts = System.currentTimeMillis();
+                    String date = new SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
+                            .format(new Date(ts));
+
+                    DatabaseReference commentsRef = FirebaseDatabase.getInstance(DB_URL)
+                            .getReference("posts").child(postId).child("comments");
+                    String commentId = commentsRef.push().getKey();
+                    if (commentId == null) return;
+
+                    Comment c = new Comment();
+                    c.id = commentId;
+                    c.text = text;
+                    c.uid = uid;
+                    c.userName = name;
+                    c.profilePic = pic;
+                    c.timestamp = ts;
+                    c.date = date;
+                    c.likesCount = 0;
+
+                    commentsRef.child(commentId).setValue(c);
+                    FirebaseDatabase.getInstance(DB_URL)
+                            .getReference("posts").child(postId)
+                            .child("commentsCount").setValue(comments.size() + 1);
+                    commentInput.setText("");
+                }
+
+                @Override public void onCancelled(DatabaseError error) { }
+            });
+        });
+    }
+
+    private void listenForComments() {
+        if (postId == null) return;
+        FirebaseDatabase.getInstance(DB_URL)
+                .getReference("posts").child(postId).child("comments")
+                .orderByChild("timestamp")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        comments.clear();
+                        String uid = FirebaseAuth.getInstance().getUid();
+                        for (DataSnapshot child : snapshot.getChildren()) {
+                            Comment c = child.getValue(Comment.class);
+                            if (c != null) {
+                                c.id = child.getKey();
+                                // populate liked flag
+                                c.liked = child.child("likes").child(uid == null ? "" : uid).exists();
+                                Long cnt = child.child("likesCount").getValue(Long.class);
+                                if (cnt != null) c.likesCount = cnt.intValue();
+                                comments.add(c);
+                            }
+                        }
+                        commentAdapter.notifyDataSetChanged();
+                        commentCount.setText(String.valueOf(comments.size()));
+                    }
+                    @Override public void onCancelled(DatabaseError error) { }
+                });
+    }
+
+    private void toggleCommentLike(Comment c) {
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid == null || postId == null || c.id == null) return;
+
+        boolean currentlyLiked = c.liked;
+        int newCount = Math.max(c.likesCount + (currentlyLiked ? -1 : 1), 0);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance(DB_URL)
+                .getReference("posts").child(postId).child("comments").child(c.id);
+
+        if (currentlyLiked) {
+            ref.child("likes").child(uid).removeValue();
+        } else {
+            ref.child("likes").child(uid).setValue(true);
+        }
+        ref.child("likesCount").setValue(newCount);
+
+        c.liked = !currentlyLiked;
+        c.likesCount = newCount;
+        commentAdapter.notifyDataSetChanged();
     }
 }

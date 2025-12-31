@@ -118,13 +118,21 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
         });
 
         holder.btnAnswer.setOnClickListener(v -> {
-            String answerText = holder.answerInput.getText().toString().trim();
-            if (TextUtils.isEmpty(answerText)) {
-                Toast.makeText(context, "Answer cannot be empty", Toast.LENGTH_SHORT).show();
+            if (q.questionId == null) {
+                Toast.makeText(context, "Missing question id", Toast.LENGTH_SHORT).show();
                 return;
             }
-            submitAnswer(q, answerText);
+            showAnswerDialog(q);
         });
+
+        View.OnClickListener openAuthor = v -> {
+            if (q.uid == null || q.uid.isEmpty()) return;
+            Intent intent = new Intent(context, UserProfileActivity.class);
+            intent.putExtra("userId", q.uid);
+            context.startActivity(intent);
+        };
+        holder.userName.setOnClickListener(openAuthor);
+        holder.profileChar.setOnClickListener(openAuthor);
     }
 
     private void showAnswerDialog(Question q) {

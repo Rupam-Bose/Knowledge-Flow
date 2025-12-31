@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rupambose.knowledgeflow.All_questions;
 import com.rupambose.knowledgeflow.Ask_question;
+import com.rupambose.knowledgeflow.BlogWriting.BlogPost;
 import com.rupambose.knowledgeflow.Home.adapter.RecyclerViewAdapter;
 import com.rupambose.knowledgeflow.Home.adapter.blogItem;
 import com.rupambose.knowledgeflow.MainProfile;
@@ -47,6 +50,10 @@ public class Home extends AppCompatActivity {
     private RecyclerViewAdapter adapter;
     private final List<blogItem> posts = new ArrayList<>();
     private static final String DB_URL = "https://knowledge-flow-87853-default-rtdb.asia-southeast1.firebasedatabase.app/";
+    private AutoCompleteTextView searchInput;
+    private ArrayAdapter<String> suggestionsAdapter;
+    private final List<String> titleSuggestions = new ArrayList<>();
+    private final List<String> titleKeys = new ArrayList<>();
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -66,6 +73,7 @@ public class Home extends AppCompatActivity {
         floating_question = findViewById(R.id.floating_question);
         floating_question_answer = findViewById(R.id.floating_question_answer);
         floating_bookmarks = findViewById(R.id.floating_bookmarks);
+        searchInput = findViewById(R.id.searchInput);
 
         // show FAB menu again
         floating_add.setVisibility(View.VISIBLE);
@@ -136,6 +144,24 @@ public class Home extends AppCompatActivity {
         adapter = new RecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
 
+        suggestionsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, titleSuggestions);
+        searchInput.setAdapter(suggestionsAdapter);
+
+        searchInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.filterByTitle(s == null ? "" : s.toString());
+                filterSuggestions(s == null ? "" : s.toString());
+            }
+            @Override public void afterTextChanged(android.text.Editable s) { }
+        });
+
+        searchInput.setOnItemClickListener((parent, view, position, id) -> {
+            if (position < 0 || position >= titleKeys.size()) return;
+            String key = titleKeys.get(position);
+            openPostByKey(key);
+        });
+
         listenForPosts();
     }
 
@@ -146,15 +172,20 @@ public class Home extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         posts.clear();
+                        titleSuggestions.clear();
+                        titleKeys.clear();
                         for (DataSnapshot child : snapshot.getChildren()) {
                             blogItem item = child.getValue(blogItem.class);
                             if (item != null) {
                                 item.setKey(child.getKey());
                                 posts.add(item);
+                                titleSuggestions.add(item.getContentTitle() == null ? "" : item.getContentTitle());
+                                titleKeys.add(child.getKey());
                             }
                         }
                         Collections.sort(posts, Comparator.comparingLong(blogItem::getTimestamp).reversed());
                         adapter.setItems(posts);
+                        suggestionsAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -162,6 +193,27 @@ public class Home extends AppCompatActivity {
                         Toast.makeText(Home.this, "Failed to load posts", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void filterSuggestions(String query) {
+        // AutoCompleteTextView handles filtering its adapter; we just ensure the list is current.
+        suggestionsAdapter.getFilter().filter(query);
+    }
+
+    private void openPostByKey(String key) {
+        blogItem item = adapter.getItemByKey(key);
+        if (item == null) return;
+        Intent intent = new Intent(this, BlogPost.class);
+        intent.putExtra("postId", item.getKey());
+        intent.putExtra("title", item.getContentTitle());
+        intent.putExtra("content", item.getPost());
+        intent.putExtra("profileName", item.getProfileName());
+        intent.putExtra("profilePic", item.getProfilePic());
+        intent.putExtra("date", item.getDate());
+        intent.putExtra("likesCount", item.getLikesCount());
+        intent.putExtra("commentsCount", item.getCommentsCount());
+        intent.putExtra("authorUid", item.getUid());
+        startActivity(intent);
     }
 
     private void SetVisibility(boolean clicked) {

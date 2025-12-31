@@ -74,6 +74,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Username" />
 
+    <TextView
+        android:id="@+id/followersCountMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="0 followers"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/Useremail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewHome"
         android:layout_width="match_parent"
@@ -85,7 +97,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Useremail"
+        app:layout_constraintTop_toBottomOf="@+id/followersCountMain"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
@@ -154,16 +166,16 @@
                 android:id="@+id/notificationsIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/notifications" />
+                android:src="@drawable/question" />
 
 
             <TextView
-                android:id="@+id/notificationsText"
+                android:id="@+id/cardViewQuestions"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingStart="15dp"
-                android:text="Notifications"
+                android:text="Questions"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold" />
