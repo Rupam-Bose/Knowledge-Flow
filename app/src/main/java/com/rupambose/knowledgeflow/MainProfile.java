@@ -36,7 +36,7 @@ import java.util.Map;
 public class MainProfile extends AppCompatActivity {
 
     ImageView cover;
-    CardView logout,Home,WritingBlog,bookmarks, all_questions;
+    CardView logout,Home,WritingBlog,bookmarks, all_questions,askquesions;
     TextView name,email, followersCountMain;
 
 
@@ -56,9 +56,18 @@ public class MainProfile extends AppCompatActivity {
         Home = findViewById(R.id.cardViewHome);
         WritingBlog = findViewById(R.id.cardViewWritingBlog);
         bookmarks = findViewById(R.id.cardViewbookmarks);
-        all_questions = findViewById(R.id.cardViewNotifications);
+        all_questions = findViewById(R.id.cardViewquestionandanswers);
         followersCountMain = findViewById(R.id.followersCountMain);
+        askquesions = findViewById(R.id.cardViewaskquestion);
         String userId = FirebaseAuth.getInstance().getUid();
+
+        askquesions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainProfile.this, Ask_question.class);
+                startActivity(intent);
+            }
+        });
 
         WritingBlog.setOnClickListener(new View.OnClickListener() {
             @Override

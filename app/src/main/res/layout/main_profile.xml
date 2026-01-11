@@ -140,7 +140,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewNotifications"
+        android:id="@+id/cardViewquestionandanswers"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="40dp"
@@ -163,25 +163,76 @@
 
             <ImageView
                 android:layout_marginLeft="10dp"
-                android:id="@+id/notificationsIcon"
+                android:id="@+id/QuestionandAnswerIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/questionsandanswer" />
+
+
+            <TextView
+                android:id="@+id/TextQuestionAndAnswer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="15dp"
+                android:text="Questions ans Answers"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/QuestionAndAnswerArrow"
+                android:layout_marginRight="10dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/arrow" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewaskquestion"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginRight="40dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewHome"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="12dp">
+
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:id="@+id/AskQuestionIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/question" />
 
 
             <TextView
-                android:id="@+id/cardViewQuestions"
+                android:id="@+id/TextAskAnswer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingStart="15dp"
-                android:text="Questions"
+                android:text="Ask Questions"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/notificationsArrow"
+                android:id="@+id/AskquesionsArrow"
                 android:layout_marginRight="10dp"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
@@ -195,12 +246,12 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="80dp"
         android:layout_marginRight="40dp"
         app:cardCornerRadius="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewNotifications"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewquestionandanswers"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
@@ -342,6 +393,10 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
